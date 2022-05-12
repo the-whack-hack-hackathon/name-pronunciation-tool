@@ -12,7 +12,7 @@ function pronounce() {
     xmlHttpRequest.onload = function (event) {
         const blob = new Blob([xmlHttpRequest.response], { type: "audio/ogg" });
         const objectUrl = URL.createObjectURL(blob);
-        const audio = new Audio();
+        const audio = document.getElementById("myAudio");
         audio.src = objectUrl;
         audio.onload = function (audEvent) {
             URL.revokeObjectURL(objectUrl);
@@ -23,6 +23,6 @@ function pronounce() {
 }
 
 function isValidString(inputStr){
-    const regexForStr = /^[a-zA-Z]+$/
+    const regexForStr = /^[a-zA-Z ]+$/
     return inputStr.match(regexForStr);
 }

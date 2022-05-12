@@ -44,7 +44,7 @@ public class NamePronunciationController {
         headers.set("Authorization","Bearer " + jwt);
         headers.set("Ocp-Apim-Subscription-Key", "091137369163400ea3344963ab427d91");
 
-        String body =   "<speak version='1.0' xml:lang='en-US'>  <voice xml:lang='en-US' xml:gender='Male'  name='ca-ES-JoanaNeural'> %s </voice> </speak>";
+        String body =   "<speak version='1.0' xml:lang='en-US'>  <voice xml:lang='en-US' xml:gender='Male'> %s </voice> </speak>";
         body = String.format(body, inputWord);
         LOGGER.info("Body= {}", body);
         HttpEntity<String> entity = new HttpEntity<>(body, headers);

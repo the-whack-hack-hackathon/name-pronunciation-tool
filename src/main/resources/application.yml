@@ -1,2 +1,22 @@
 locale-properties:
-    
+  neuralVoices:
+    usMale:
+      voiceName: en-US-GuyNeural
+    usFemale:
+      voiceName: en-US-JennyNeural
+    inMale:
+      voiceName: hi-IN-MadhurNeural
+    inFemale:
+      voiceName: hi-IN-SwaraNeural
+    ukMale:
+      voiceName: en-GB-AlfieNeural
+    ukFemale:
+      voiceName: en-GB-OliviaNeural
+    frMale:
+      voiceName: fr-FR-AlainNeural
+    frFemale:
+      voiceName: fr-FR-EloiseNeural
+    cnMale:
+      voiceName: zh-CN-YunyangNeural
+    cnFemale:
+      voiceName: zh-CN-XiaoyouNeural

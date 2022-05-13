@@ -14,6 +14,19 @@
 </nav>
 <div class="container border border-warning rounded bg-light" style="margin-top: 20px;padding:20px;">
     <div class="row mb-3">
+        <label class="col-sm-3 col-form-label" for="locale">Locale</label>
+        <div class="col-sm-3">
+            <select aria-label=".form-select-sm" class="form-select form-select-sm" id="locale" onchange="resetAudio()">
+                <option selected value="us">default</option>
+                <option value="us">English (United States)</option>
+                <option value="in">Hindi (India)</option>
+                <option value="gb">English (United Kingdom)</option>
+                <option value="fr">French (France)</option>
+                <option value="cn">Chinese (Mandarin, Simplified)</option>
+            </select>
+        </div>
+    </div>
+    <div class="row mb-3">
         <label class="col-sm-3 col-form-label" for="rate">Speaking rate</label>
         <div class="col-sm-3">
             <select aria-label=".form-select-sm" class="form-select form-select-sm" id="rate" onchange="resetAudio()">

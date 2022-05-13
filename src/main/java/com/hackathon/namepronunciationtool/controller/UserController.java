@@ -1,7 +1,7 @@
 package com.hackathon.namepronunciationtool.controller;
 
 import com.hackathon.namepronunciationtool.entity.UserDetails;
-import com.hackathon.namepronunciationtool.repo.UserYsqlRepository;
+import com.hackathon.namepronunciationtool.repo.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,22 +19,22 @@ public class UserController {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
-    private UserYsqlRepository userYsqlRepository;
+    private UserRepository userRepository;
 
     @PutMapping("/api/user/create")
     public String createUser(@RequestBody UserDetails userDetails){
-        userYsqlRepository.save(userDetails);
+        userRepository.save(userDetails);
         return "SUCCESS";
     }
 
     @GetMapping("/api/user/list/{uid}")
     public UserDetails fetchUser(@PathVariable("uid") String uid){
-        return userYsqlRepository.findByUid(uid);
+        return userRepository.findByUid(uid);
     }
 
     @GetMapping("/api/user/list/all")
     public List<UserDetails> fetchAllUsers(){
-        Iterable<UserDetails> iterator = userYsqlRepository.findAll();
+        Iterable<UserDetails> iterator = userRepository.findAll();
         List<UserDetails> userList = new ArrayList<>();
         iterator.forEach(userList::add);
         return userList;

@@ -1,10 +1,10 @@
 package com.hackathon.namepronunciationtool.repo;
 
 import com.hackathon.namepronunciationtool.entity.UserDetails;
-import com.yugabyte.data.jdbc.repository.YsqlRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserYsqlRepository extends YsqlRepository<UserDetails, Integer> {
+public interface UserRepository extends PagingAndSortingRepository<UserDetails, Integer> {
     UserDetails findByUid(final String uid);
 }

@@ -1,12 +1,16 @@
 package com.hackathon.namepronunciationtool.entity;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.domain.Persistable;
-import org.springframework.data.relational.core.mapping.Table;
 
-@Table(value = "users")
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "users")
 public class UserDetails implements Persistable<String> {
+
     @Id
     private String uid;
     private String firstName;
@@ -16,6 +20,7 @@ public class UserDetails implements Persistable<String> {
     private String email;
     private String userPronunciation;
     private String systemPronunciation;
+
     @Transient
     private Boolean isInsert = true;
 

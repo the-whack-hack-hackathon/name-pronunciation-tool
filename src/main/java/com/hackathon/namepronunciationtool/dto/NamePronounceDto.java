@@ -2,8 +2,9 @@ package com.hackathon.namepronunciationtool.dto;
 
 public class NamePronounceDto {
     private String name;
-    private String gender;
-    private String rate;
+    private String gender = "F";
+    private String rate = "default";
+    private String locale = "us";
 
     public String getName() {
         return name;
@@ -29,12 +30,21 @@ public class NamePronounceDto {
         this.rate = rate;
     }
 
+    public String getLocale() {
+        return locale;
+    }
+
+    public void setLocale(String locale) {
+        this.locale = locale;
+    }
+
     @Override
     public String toString() {
         return "NamePronounceDto{" +
                 "name='" + name + '\'' +
                 ", gender='" + gender + '\'' +
                 ", rate='" + rate + '\'' +
+                ", locale='" + locale + '\'' +
                 '}';
     }
 }

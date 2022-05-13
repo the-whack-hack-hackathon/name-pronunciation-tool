@@ -8,9 +8,9 @@ locale-properties:
       voiceName: hi-IN-MadhurNeural
     inFemale:
       voiceName: hi-IN-SwaraNeural
-    ukMale:
+    gbMale:
       voiceName: en-GB-AlfieNeural
-    ukFemale:
+    gbFemale:
       voiceName: en-GB-OliviaNeural
     frMale:
       voiceName: fr-FR-AlainNeural

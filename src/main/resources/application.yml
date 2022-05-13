@@ -20,3 +20,25 @@ hibernate:
   hbm2ddl.auto: update
 
 
+locale-properties:
+  neuralVoices:
+    usMale:
+      voiceName: en-US-GuyNeural
+    usFemale:
+      voiceName: en-US-JennyNeural
+    inMale:
+      voiceName: hi-IN-MadhurNeural
+    inFemale:
+      voiceName: hi-IN-SwaraNeural
+    gbMale:
+      voiceName: en-GB-AlfieNeural
+    gbFemale:
+      voiceName: en-GB-OliviaNeural
+    frMale:
+      voiceName: fr-FR-AlainNeural
+    frFemale:
+      voiceName: fr-FR-EloiseNeural
+    cnMale:
+      voiceName: zh-CN-YunyangNeural
+    cnFemale:
+      voiceName: zh-CN-XiaoyouNeural

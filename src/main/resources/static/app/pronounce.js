@@ -1,12 +1,14 @@
 function pronounce() {
-    const str = document.getElementById("name").value;
-    if (str.length === 0 || !isValidString(str)) {
+    const name = document.getElementById("name").value;
+    const gender = document.querySelector('input[name="gender"]:checked').value;;
+    if (name.length === 0 || !isValidString(name)) {
         const myModal = new bootstrap.Modal(document.getElementById("staticBackdrop"));
         myModal.show();
         return;
     }
     const xmlHttpRequest = new XMLHttpRequest();
-    xmlHttpRequest.open("GET", "/api/pronounceName/" + str);
+    xmlHttpRequest.open("POST", "/api/pronounceName");
+
     xmlHttpRequest.setRequestHeader("Content-Type", "application/json");
     xmlHttpRequest.responseType = "blob";
     xmlHttpRequest.onload = function (event) {
@@ -19,7 +21,8 @@ function pronounce() {
         };
         audio.play();
     };
-    xmlHttpRequest.send();
+    const request = "{\"name\":\""+name+"\",\"gender\":\""+gender+"\"}";
+    xmlHttpRequest.send(request);
 }
 
 function isValidString(inputStr){

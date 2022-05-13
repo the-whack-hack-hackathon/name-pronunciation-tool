@@ -1,5 +1,6 @@
 function pronounce() {
     const name = document.getElementById("name").value;
+    const rate = document.getElementById("rate").value;
     const gender = document.querySelector('input[name="gender"]:checked').value;;
     if (name.length === 0 || !isValidString(name)) {
         const myModal = new bootstrap.Modal(document.getElementById("staticBackdrop"));
@@ -21,11 +22,16 @@ function pronounce() {
         };
         audio.play();
     };
-    const request = "{\"name\":\""+name+"\",\"gender\":\""+gender+"\"}";
+    const request = "{\"name\":\""+name+"\",\"gender\":\""+gender+"\",\"rate\":\""+rate+"\"}";
     xmlHttpRequest.send(request);
 }
 
 function isValidString(inputStr){
     const regexForStr = /^[a-zA-Z ]+$/
     return inputStr.match(regexForStr);
+}
+
+function resetAudio(){
+    const audio = document.getElementById("myAudio");
+    audio.src = "";
 }

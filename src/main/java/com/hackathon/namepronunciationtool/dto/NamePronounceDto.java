@@ -3,6 +3,7 @@ package com.hackathon.namepronunciationtool.dto;
 public class NamePronounceDto {
     private String name;
     private String gender;
+    private String rate;
 
     public String getName() {
         return name;
@@ -20,11 +21,20 @@ public class NamePronounceDto {
         this.gender = gender;
     }
 
+    public String getRate() {
+        return rate;
+    }
+
+    public void setRate(String rate) {
+        this.rate = rate;
+    }
+
     @Override
     public String toString() {
         return "NamePronounceDto{" +
                 "name='" + name + '\'' +
                 ", gender='" + gender + '\'' +
+                ", rate='" + rate + '\'' +
                 '}';
     }
 }

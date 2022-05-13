@@ -17,8 +17,12 @@ import java.io.InputStream;
 
 @Service
 public class NamePronunciationService {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(NamePronunciationService.class);
+
+    private static final String EN_US_CHRISTOPHER_NEURAL = "en-US-ChristopherNeural";
+    private static final String EN_US_JENNY_NEURAL = "en-US-JennyNeural";
+    private static final String DEFAULT = "default";
+    private static final String REST_END_POINT = "https://eastus.tts.speech.microsoft.com/cognitiveservices/v1";
     private final RestTemplate restTemplate;
 
     @Autowired
@@ -27,25 +31,30 @@ public class NamePronunciationService {
     }
 
     public StreamingResponseBody getVoice(String inputWord) {
-        return getVoice(inputWord, null);
+        return getVoice(inputWord, null, null);
     }
 
     public StreamingResponseBody getVoice(NamePronounceDto namePronounceDto) {
-        return getVoice(namePronounceDto.getName(), namePronounceDto.getGender());
+        return getVoice(namePronounceDto.getName(), namePronounceDto.getGender(), namePronounceDto.getRate());
     }
 
-    public StreamingResponseBody getVoice(String inputWord, String gender) {
+    public StreamingResponseBody getVoice(String inputWord, String gender, String rate) {
         HttpHeaders headers = getHttpHeaders();
         if ("m".equalsIgnoreCase(gender)) {
-            gender = "en-US-ChristopherNeural";
+            gender = EN_US_CHRISTOPHER_NEURAL;
         } else {
-            gender = "en-US-JennyNeural";
+            gender = EN_US_JENNY_NEURAL;
         }
-        String body = "<speak version='1.0' xml:lang=\"en-US\"> <voice name=\"" + gender + "\">" + inputWord + "</voice></speak>";
-        LOGGER.info("Body= {}", body);
-        HttpEntity<String> entity = new HttpEntity<>(body, headers);
+        if (rate == null) {
+            rate = DEFAULT;
+        }
+        String speechPayload = "<speak version='1.0' xmlns=\"http://www.w3.org/2001/10/synthesis\" xml:lang=\"en-US\"> " +
+                "<voice name=\"" + gender + "\">" +
+                "<prosody rate=\"" + rate + "\">" + inputWord + "</prosody></voice></speak>";
+        LOGGER.info("speechPayload= {}", speechPayload);
+        HttpEntity<String> entity = new HttpEntity<>(speechPayload, headers);
 
-        byte[] voice = restTemplate.exchange("https://eastus.tts.speech.microsoft.com/cognitiveservices/v1", HttpMethod.POST, entity, byte[].class).getBody();
+        byte[] voice = restTemplate.exchange(REST_END_POINT, HttpMethod.POST, entity, byte[].class).getBody();
         LOGGER.info("Response received from speech service ");
         assert voice != null;
         InputStream in = new ByteArrayInputStream(voice);
@@ -61,7 +70,6 @@ public class NamePronunciationService {
         headers.set("Ocp-Apim-Subscription-Key", "091137369163400ea3344963ab427d91");
         return headers;
     }
-
 
     private String getJWT() {
         HttpHeaders headers = new HttpHeaders();

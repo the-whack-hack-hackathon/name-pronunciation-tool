@@ -13,32 +13,46 @@
      style="background-color: #d71e28;border-bottom: 4px solid #ffcd41; color: white;font-weight: bold;">
     <p style="margin-left: 10px;">NAME PRONUNCIATION TOOL</p>
 </nav>
-<div class="container" style="margin-top: 20px;">
-    <div class="panel panel-default">
-        <fieldset class="row mb-3">
-            <legend class="col-form-label col-sm-2 pt-0">Gender</legend>
-            <div class="col-sm-10">
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="gender" id="gridRadios1" value="F" checked>
-                    <label class="form-check-label" for="gridRadios1">
-                        Female
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="gender" id="gridRadios2" value="M">
-                    <label class="form-check-label" for="gridRadios2">
-                        Male
-                    </label>
-                </div>
+<div class="container border border-warning rounded bg-light" style="margin-top: 20px;padding:20px;">
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label" for="rate">Speaking rate</label>
+        <div class="col-sm-3">
+            <select aria-label=".form-select-sm" class="form-select form-select-sm" id="rate" onchange="resetAudio()">
+                <option selected value="default">default</option>
+                <option value="x-slow">x-slow</option>
+                <option value="slow">slow</option>
+                <option value="medium">medium</option>
+                <option value="fast">fast</option>
+                <option value="x-fast">x-fast</option>
+            </select>
+        </div>
+    </div>
+    <fieldset class="row mb-3">
+        <legend class="col-form-label col-sm-3 pt-0">Voice</legend>
+        <div class="col-sm-4">
+            <div class="form-check">
+                <input checked class="form-check-input" id="gridRadios1" name="gender" onchange="resetAudio()"
+                       onclick="resetAudio()"
+                       type="radio" value="F">
+                <label class="form-check-label" for="gridRadios1">
+                    Female
+                </label>
             </div>
-        </fieldset>
+            <div class="form-check">
+                <input class="form-check-input" id="gridRadios2" name="gender" onchange="resetAudio()"
+                       onclick="resetAudio()"
+                       type="radio" value="M">
+                <label class="form-check-label" for="gridRadios2">
+                    Male
+                </label>
+            </div>
+        </div>
+    </fieldset>
+    <div class="panel panel-default bg-white rounded border" style="padding:20px">
         <div class="panel-body">
-            <div class="input-group mb-3" style="width: 400px;">
-                <input aria-describedby="button-addon2" aria-label="Type a Name" class="form-control" id="name" placeholder="Type a Name"
-                       type="text">
-                <button class="btn btn-outline-secondary" id="button-addon2" onclick="pronounce()"
-                        type="button">Pronounce
-                </button>
+            <div class="input-group input-group-sm mb-3" style="width: 400px;">
+                <input aria-describedby="button-addon2" aria-label="Type a Name" class="form-control" id="name" placeholder="Type a Name" type="text">
+                <button class="btn btn-secondary" id="button-addon2" onclick="pronounce()" type="button">Pronounce</button>
             </div>
         </div>
         <div class="panel-footer">
@@ -49,7 +63,8 @@
     </div>
 </div>
 <!-- Modal -->
-<div aria-hidden="true" aria-labelledby="staticBackdropLabel" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false"
+<div aria-hidden="true" aria-labelledby="staticBackdropLabel" class="modal fade" data-bs-backdrop="static"
+     data-bs-keyboard="false"
      id="staticBackdrop" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">

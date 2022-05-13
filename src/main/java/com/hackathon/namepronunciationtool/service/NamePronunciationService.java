@@ -1,5 +1,6 @@
 package com.hackathon.namepronunciationtool.service;
 
+import com.hackathon.namepronunciationtool.config.LocaleProperties;
 import com.hackathon.namepronunciationtool.dto.NamePronounceDto;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -19,37 +20,30 @@ import java.io.InputStream;
 public class NamePronunciationService {
     private static final Logger LOGGER = LoggerFactory.getLogger(NamePronunciationService.class);
 
-    private static final String EN_US_CHRISTOPHER_NEURAL = "en-US-ChristopherNeural";
+    private static final String EN_US_CHRISTOPHER_NEURAL = "en-US-GuyNeural";
     private static final String EN_US_JENNY_NEURAL = "en-US-JennyNeural";
-    private static final String DEFAULT = "default";
     private static final String REST_END_POINT = "https://eastus.tts.speech.microsoft.com/cognitiveservices/v1";
     private final RestTemplate restTemplate;
+    private final LocaleProperties localeProperties;
 
     @Autowired
-    public NamePronunciationService(RestTemplate restTemplate) {
+    public NamePronunciationService(RestTemplate restTemplate, LocaleProperties localeProperties) {
         this.restTemplate = restTemplate;
+        this.localeProperties = localeProperties;
     }
 
     public StreamingResponseBody getVoice(String inputWord) {
-        return getVoice(inputWord, null, null);
+        return getVoice(inputWord, "F", "default", "us");
     }
 
     public StreamingResponseBody getVoice(NamePronounceDto namePronounceDto) {
-        return getVoice(namePronounceDto.getName(), namePronounceDto.getGender(), namePronounceDto.getRate());
+        return getVoice(namePronounceDto.getName(), namePronounceDto.getGender(), namePronounceDto.getRate(), namePronounceDto.getLocale());
     }
 
-    public StreamingResponseBody getVoice(String inputWord, String gender, String rate) {
+    public StreamingResponseBody getVoice(String inputWord, String gender, String rate, String locale) {
         HttpHeaders headers = getHttpHeaders();
-        if ("m".equalsIgnoreCase(gender)) {
-            gender = EN_US_CHRISTOPHER_NEURAL;
-        } else {
-            gender = EN_US_JENNY_NEURAL;
-        }
-        if (rate == null) {
-            rate = DEFAULT;
-        }
         String speechPayload = "<speak version='1.0' xmlns=\"http://www.w3.org/2001/10/synthesis\" xml:lang=\"en-US\"> " +
-                "<voice name=\"" + gender + "\">" +
+                "<voice name=\"" + getVoiceName(gender, locale) + "\">" +
                 "<prosody rate=\"" + rate + "\">" + inputWord + "</prosody></voice></speak>";
         LOGGER.info("speechPayload= {}", speechPayload);
         HttpEntity<String> entity = new HttpEntity<>(speechPayload, headers);
@@ -59,6 +53,17 @@ public class NamePronunciationService {
         assert voice != null;
         InputStream in = new ByteArrayInputStream(voice);
         return outputStream -> IOUtils.copy(in, outputStream);
+    }
+
+    private String getVoiceName(String gender, String locale) {
+        String key;
+        if ("m".equalsIgnoreCase(gender)) {
+            key = locale + "Male";
+        } else {
+            key = locale + "Female";
+        }
+        LOGGER.info("key = {}", key);
+        return localeProperties.getNeuralVoices().get(key).getVoiceName();
     }
 
     private HttpHeaders getHttpHeaders() {

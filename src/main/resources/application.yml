@@ -42,3 +42,14 @@ locale-properties:
       voiceName: zh-CN-YunyangNeural
     cnFemale:
       voiceName: zh-CN-XiaoyouNeural
+
+logging.level:
+  root: INFO
+
+management.endpoints:
+    web.exposure.include: mappings, health, info
+
+management.endpoint:
+  mappings.enabled: true
+
+management.security.enabled: false

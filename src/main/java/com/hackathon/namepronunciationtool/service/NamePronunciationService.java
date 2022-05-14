@@ -55,6 +55,22 @@ public class NamePronunciationService {
         return outputStream -> IOUtils.copy(in, outputStream);
     }
 
+    public StreamingResponseBody getVoice(String inputWord, String name, String rate) {
+        HttpHeaders headers = getHttpHeaders();
+        String speechPayload = "<speak version='1.0' xmlns=\"http://www.w3.org/2001/10/synthesis\" xml:lang=\"en-US\"> " +
+                "<voice name=\"" + name + "\">" +
+                "<prosody rate=\"" + rate + "\">" + inputWord + "</prosody></voice></speak>";
+        LOGGER.info("speechPayload= {}", speechPayload);
+        HttpEntity<String> entity = new HttpEntity<>(speechPayload, headers);
+
+        byte[] voice = restTemplate.exchange(REST_END_POINT, HttpMethod.POST, entity, byte[].class).getBody();
+        LOGGER.info("Response received from speech service ");
+        assert voice != null;
+        InputStream in = new ByteArrayInputStream(voice);
+        return outputStream -> IOUtils.copy(in, outputStream);
+    }
+
+
     private String getVoiceName(String gender, String locale) {
         String key;
         if ("m".equalsIgnoreCase(gender)) {

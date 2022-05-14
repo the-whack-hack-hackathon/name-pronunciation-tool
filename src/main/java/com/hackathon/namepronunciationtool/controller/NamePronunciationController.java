@@ -1,6 +1,8 @@
 package com.hackathon.namepronunciationtool.controller;
 
 import com.hackathon.namepronunciationtool.dto.NamePronounceDto;
+import com.hackathon.namepronunciationtool.entity.Voice;
+import com.hackathon.namepronunciationtool.repo.VoiceRepository;
 import com.hackathon.namepronunciationtool.service.NamePronunciationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import java.util.Optional;
+
 @RestController
 public class NamePronunciationController {
 
@@ -19,9 +23,12 @@ public class NamePronunciationController {
 
     private final NamePronunciationService namePronunciationService;
 
+    private VoiceRepository voiceRepository;
+
     @Autowired
-    public NamePronunciationController(NamePronunciationService namePronunciationService) {
+    public NamePronunciationController(NamePronunciationService namePronunciationService, VoiceRepository voiceRepository) {
         this.namePronunciationService = namePronunciationService;
+        this.voiceRepository = voiceRepository;
     }
 
     @GetMapping(value = "/api/pronounceName/{name}", produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
@@ -33,6 +40,23 @@ public class NamePronunciationController {
         LOGGER.info("Success");
         return new ResponseEntity<>(streamingResponseBody, httpHeaders, HttpStatus.OK);
     }
+
+    @GetMapping(value = "/api/pronounceNameWithVoice/{voiceId}/{name}", produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
+    public ResponseEntity<StreamingResponseBody> namePronounceWithVoice(@PathVariable("voiceId") int voiceId, @PathVariable("name") String name) {
+        LOGGER.info("Pronouncing voiceId = {}, name = {}", voiceId, name);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        Optional<Voice> voice = voiceRepository.findById(voiceId);
+        if (voice.isPresent()) {
+            httpHeaders.add(HttpHeaders.CONTENT_TYPE, "audio/mpeg");
+            StreamingResponseBody streamingResponseBody = namePronunciationService.getVoice(name, voice.get().getName(), "default");
+            LOGGER.info("Success");
+            return new ResponseEntity<>(streamingResponseBody, httpHeaders, HttpStatus.OK);
+        } else {
+            LOGGER.error("Voice not found: {}", voiceId);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 
     @PostMapping(value = "/api/pronounceName", produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
     public ResponseEntity<StreamingResponseBody> namePronounce(@RequestBody NamePronounceDto namePronounceDto) {

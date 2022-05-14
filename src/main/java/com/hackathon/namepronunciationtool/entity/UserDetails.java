@@ -21,6 +21,8 @@ public class UserDetails implements Persistable<String> {
     private String userPronunciation;
     private String systemPronunciation;
 
+    private int voiceId;
+
     @Transient
     private Boolean isInsert = true;
 
@@ -106,5 +108,11 @@ public class UserDetails implements Persistable<String> {
         return isInsert;
     }
 
+    public int getVoiceId() {
+        return voiceId;
+    }
 
+    public void setVoiceId(int voiceId) {
+        this.voiceId = voiceId;
+    }
 }

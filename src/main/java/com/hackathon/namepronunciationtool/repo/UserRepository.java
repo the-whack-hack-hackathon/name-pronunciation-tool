@@ -5,6 +5,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends PagingAndSortingRepository<UserDetails, Integer> {
+public interface UserRepository extends PagingAndSortingRepository<UserDetails, String> {
     UserDetails findByUid(final String uid);
 }

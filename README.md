@@ -1,14 +1,19 @@
 # name-pronunciation-tool
 The Whack Hack - Name Pronunciation Tool
 
-## Milestones:
-#### Steps we follow for this challenge
+## Requirements
 
-1. Implement UI and Integrate with API to play a sound
-2. Leverage api to pronounce sounds
-3. Visio to depict architechture
-4. Documentation and video recording for demo
-5. Different voices(Men, Women, region specific)
-6. Diffrenet Languages
-7. Improve UI & API
+For building and running the application you need:
 
+- JDK 11
+- Maven 3
+
+## Running the application locally
+
+There are several ways to run a Spring Boot application on your local machine. One way is to execute the `main` method in the `com.hackathon.namepronunciationtool.NamePronunciationToolApplication` class from your IDE.
+
+Alternatively you can use the [Spring Boot Maven plugin](https://docs.spring.io/spring-boot/docs/current/reference/html/build-tool-plugins-maven-plugin.html) like so:
+
+```shell
+mvn spring-boot:run
+```

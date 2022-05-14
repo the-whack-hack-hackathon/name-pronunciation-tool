@@ -1,4 +1,4 @@
-package com.hackathon.namepronunciationtool.web;
+package com.hackathon.namepronunciationtool.controller;
 
 import com.hackathon.namepronunciationtool.dto.NamePronounceDto;
 import com.hackathon.namepronunciationtool.service.NamePronunciationService;

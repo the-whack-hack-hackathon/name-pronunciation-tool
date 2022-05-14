@@ -38,6 +38,7 @@ public class UserController {
         existing.setPreferredLastName(userDetails.getPreferredLastName());
         existing.setPreferredFirstName(userDetails.getPreferredFirstName());
         existing.setSystemPronunciation(userDetails.getSystemPronunciation());
+        existing.setVoiceId(userDetails.getVoiceId());
 
         userRepository.save(existing);
         return "SUCCESS";

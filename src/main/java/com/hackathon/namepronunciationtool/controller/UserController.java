@@ -57,11 +57,7 @@ public class UserController {
     @GetMapping("/api/users/{uid}")
     public ResponseEntity<UserDetails> fetchUser(@PathVariable("uid") String uid){
         Optional<UserDetails> user = userRepository.findById(uid);
-        if (user.isPresent()) {
-            return new ResponseEntity<>(user.get(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return user.map(userDetails -> new ResponseEntity<>(userDetails, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @GetMapping("/api/users")

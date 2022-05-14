@@ -19,6 +19,11 @@ hibernate:
   show_sql: true
   hbm2ddl.auto: update
 
+speech-config-properties:
+  subscriptionKey: ${SUBSCRIPTION_KEY}
+  outputFormat: audio-48khz-192kbitrate-mono-mp3
+  serviceUrl: https://eastus.tts.speech.microsoft.com/cognitiveservices/v1
+  tokenUrl: https://eastus.api.cognitive.microsoft.com/sts/v1.0/issuetoken
 
 locale-properties:
   neuralVoices:

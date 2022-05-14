@@ -1,6 +1,7 @@
 package com.hackathon.namepronunciationtool.service;
 
 import com.hackathon.namepronunciationtool.config.LocaleProperties;
+import com.hackathon.namepronunciationtool.config.SpeechConfigProperties;
 import com.hackathon.namepronunciationtool.dto.NamePronounceDto;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -20,16 +21,15 @@ import java.io.InputStream;
 public class NamePronunciationService {
     private static final Logger LOGGER = LoggerFactory.getLogger(NamePronunciationService.class);
 
-    private static final String EN_US_CHRISTOPHER_NEURAL = "en-US-GuyNeural";
-    private static final String EN_US_JENNY_NEURAL = "en-US-JennyNeural";
-    private static final String REST_END_POINT = "https://eastus.tts.speech.microsoft.com/cognitiveservices/v1";
     private final RestTemplate restTemplate;
     private final LocaleProperties localeProperties;
+    private final SpeechConfigProperties speechConfigProperties;
 
     @Autowired
-    public NamePronunciationService(RestTemplate restTemplate, LocaleProperties localeProperties) {
+    public NamePronunciationService(RestTemplate restTemplate, LocaleProperties localeProperties, SpeechConfigProperties speechConfigProperties) {
         this.restTemplate = restTemplate;
         this.localeProperties = localeProperties;
+        this.speechConfigProperties = speechConfigProperties;
     }
 
     public StreamingResponseBody getVoice(String inputWord) {
@@ -48,7 +48,7 @@ public class NamePronunciationService {
         LOGGER.info("speechPayload= {}", speechPayload);
         HttpEntity<String> entity = new HttpEntity<>(speechPayload, headers);
 
-        byte[] voice = restTemplate.exchange(REST_END_POINT, HttpMethod.POST, entity, byte[].class).getBody();
+        byte[] voice = restTemplate.exchange(speechConfigProperties.getServiceUrl(), HttpMethod.POST, entity, byte[].class).getBody();
         LOGGER.info("Response received from speech service ");
         assert voice != null;
         InputStream in = new ByteArrayInputStream(voice);
@@ -63,7 +63,7 @@ public class NamePronunciationService {
         LOGGER.info("speechPayload= {}", speechPayload);
         HttpEntity<String> entity = new HttpEntity<>(speechPayload, headers);
 
-        byte[] voice = restTemplate.exchange(REST_END_POINT, HttpMethod.POST, entity, byte[].class).getBody();
+        byte[] voice = restTemplate.exchange(speechConfigProperties.getServiceUrl(), HttpMethod.POST, entity, byte[].class).getBody();
         LOGGER.info("Response received from speech service ");
         assert voice != null;
         InputStream in = new ByteArrayInputStream(voice);
@@ -86,20 +86,20 @@ public class NamePronunciationService {
         String jwt = getJWT();
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/ssml+xml");
-        headers.set("X-Microsoft-OutputFormat", "audio-16khz-32kbitrate-mono-mp3");
+        headers.set("X-Microsoft-OutputFormat", speechConfigProperties.getOutputFormat());
         headers.set("Authorization", "Bearer " + jwt);
-        headers.set("Ocp-Apim-Subscription-Key", "091137369163400ea3344963ab427d91");
+        headers.set("Ocp-Apim-Subscription-Key", speechConfigProperties.getSubscriptionKey());
         return headers;
     }
 
     private String getJWT() {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/jwt");
-        headers.set("Ocp-Apim-Subscription-Key", "091137369163400ea3344963ab427d91");
+        headers.set("Ocp-Apim-Subscription-Key", speechConfigProperties.getSubscriptionKey());
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        String jwt = restTemplate.exchange("https://eastus.api.cognitive.microsoft.com/sts/v1.0/issuetoken", HttpMethod.POST, entity, String.class).getBody();
-        LOGGER.info("jwt = {}", jwt);
+        String jwt = restTemplate.exchange(speechConfigProperties.getTokenUrl(), HttpMethod.POST, entity, String.class).getBody();
+        LOGGER.debug("jwt = {}", jwt);
         return jwt;
     }
 }

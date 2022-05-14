@@ -23,7 +23,7 @@ public class NamePronunciationController {
 
     private final NamePronunciationService namePronunciationService;
 
-    private VoiceRepository voiceRepository;
+    private final VoiceRepository voiceRepository;
 
     @Autowired
     public NamePronunciationController(NamePronunciationService namePronunciationService, VoiceRepository voiceRepository) {

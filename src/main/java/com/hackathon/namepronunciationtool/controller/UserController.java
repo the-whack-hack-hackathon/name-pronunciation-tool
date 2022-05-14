@@ -5,11 +5,7 @@ import com.hackathon.namepronunciationtool.repo.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,18 +17,41 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @PutMapping("/api/user/create")
+    @PostMapping("/api/users")
     public String createUser(@RequestBody UserDetails userDetails){
         userRepository.save(userDetails);
         return "SUCCESS";
     }
 
-    @GetMapping("/api/user/list/{uid}")
+    @PutMapping("/api/users/{uid}")
+    public String updateUser(@PathVariable("uid") String uid, @RequestBody UserDetails userDetails){
+        UserDetails existing = userRepository.findByUid(uid);
+        existing.setEmail(userDetails.getEmail());
+        existing.setFirstName(userDetails.getFirstName());
+        existing.setLastName(userDetails.getLastName());
+        existing.setInsert(userDetails.getInsert());
+        existing.setUserPronunciation(userDetails.getUserPronunciation());
+        existing.setPreferredLastName(userDetails.getPreferredLastName());
+        existing.setPreferredFirstName(userDetails.getPreferredFirstName());
+        existing.setSystemPronunciation(userDetails.getSystemPronunciation());
+
+        userRepository.save(existing);
+        return "SUCCESS";
+    }
+
+    @DeleteMapping("/api/users/{uid}")
+    public String deleteUser(@PathVariable("uid") String uid) {
+        UserDetails existing = userRepository.findByUid(uid);
+        userRepository.delete(existing);
+        return "SUCCESS";
+    }
+
+    @GetMapping("/api/users/{uid}")
     public UserDetails fetchUser(@PathVariable("uid") String uid){
         return userRepository.findByUid(uid);
     }
 
-    @GetMapping("/api/user/list/all")
+    @GetMapping("/api/users")
     public List<UserDetails> fetchAllUsers(){
         Iterable<UserDetails> iterator = userRepository.findAll();
         List<UserDetails> userList = new ArrayList<>();

@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -45,10 +46,11 @@ public class UserController {
     }
 
     @DeleteMapping("/api/users/{uid}")
+    @Transactional
     public ResponseEntity<String> deleteUser(@PathVariable("uid") String uid) {
         try {
-            UserDetails existing = userRepository.findByUid(uid);
-            userRepository.delete(existing);
+            long num = userRepository.deleteByUid(uid);
+            LOGGER.debug("Num rows delete: {}", num);
             return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);

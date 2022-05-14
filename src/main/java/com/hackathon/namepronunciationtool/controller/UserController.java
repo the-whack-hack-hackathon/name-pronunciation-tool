@@ -5,10 +5,14 @@ import com.hackathon.namepronunciationtool.repo.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class UserController {
@@ -40,15 +44,24 @@ public class UserController {
     }
 
     @DeleteMapping("/api/users/{uid}")
-    public String deleteUser(@PathVariable("uid") String uid) {
-        UserDetails existing = userRepository.findByUid(uid);
-        userRepository.delete(existing);
-        return "SUCCESS";
+    public ResponseEntity<String> deleteUser(@PathVariable("uid") String uid) {
+        try {
+            UserDetails existing = userRepository.findByUid(uid);
+            userRepository.delete(existing);
+            return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/api/users/{uid}")
-    public UserDetails fetchUser(@PathVariable("uid") String uid){
-        return userRepository.findByUid(uid);
+    public ResponseEntity<UserDetails> fetchUser(@PathVariable("uid") String uid){
+        Optional<UserDetails> user = userRepository.findById(uid);
+        if (user.isPresent()) {
+            return new ResponseEntity<>(user.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/api/users")

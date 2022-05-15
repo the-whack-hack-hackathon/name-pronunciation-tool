@@ -41,14 +41,14 @@ public class NamePronunciationController {
         return new ResponseEntity<>(streamingResponseBody, httpHeaders, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/api/pronounceNameWithVoice/{voiceId}/{name}", produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
-    public ResponseEntity<StreamingResponseBody> namePronounceWithVoice(@PathVariable("voiceId") int voiceId, @PathVariable("name") String name) {
-        LOGGER.info("Pronouncing voiceId = {}, name = {}", voiceId, name);
+    @GetMapping(value = "/api/pronounceNameWithVoice/{voiceId}/{name}/{rate}", produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
+    public ResponseEntity<StreamingResponseBody> namePronounceWithVoice(@PathVariable("voiceId") int voiceId, @PathVariable("name") String name, @PathVariable("rate") String rate) {
+        LOGGER.info("Pronouncing voiceId = {}, name = {}, rate={}", voiceId, name, rate);
         HttpHeaders httpHeaders = new HttpHeaders();
         Optional<Voice> voice = voiceRepository.findById(voiceId);
         if (voice.isPresent()) {
             httpHeaders.add(HttpHeaders.CONTENT_TYPE, "audio/mpeg");
-            StreamingResponseBody streamingResponseBody = namePronunciationService.getVoice(name, voice.get().getName(), "default");
+            StreamingResponseBody streamingResponseBody = namePronunciationService.getVoice(name, voice.get().getName(), rate);
             LOGGER.info("Success");
             return new ResponseEntity<>(streamingResponseBody, httpHeaders, HttpStatus.OK);
         } else {

@@ -23,25 +23,25 @@ import java.util.Optional;
 
     @PostMapping(&quot;/api/users&quot;)
     public String createUser(@RequestBody UserDetails userDetails) {
-<span class="nc" id="L26">        userRepository.save(userDetails);</span>
-<span class="nc" id="L27">        return &quot;SUCCESS&quot;;</span>
+<span class="fc" id="L26">        userRepository.save(userDetails);</span>
+<span class="fc" id="L27">        return &quot;SUCCESS&quot;;</span>
     }
 
     @PutMapping(&quot;/api/users/{uid}&quot;)
     public String updateUser(@PathVariable(&quot;uid&quot;) String uid, @RequestBody UserDetails userDetails) {
-<span class="nc" id="L32">        UserDetails existing = userRepository.findByUid(uid);</span>
-<span class="nc" id="L33">        existing.setEmail(userDetails.getEmail());</span>
-<span class="nc" id="L34">        existing.setFirstName(userDetails.getFirstName());</span>
-<span class="nc" id="L35">        existing.setLastName(userDetails.getLastName());</span>
-<span class="nc" id="L36">        existing.setInsert(userDetails.getInsert());</span>
-<span class="nc" id="L37">        existing.setUserPronunciation(userDetails.getUserPronunciation());</span>
-<span class="nc" id="L38">        existing.setPreferredLastName(userDetails.getPreferredLastName());</span>
-<span class="nc" id="L39">        existing.setPreferredFirstName(userDetails.getPreferredFirstName());</span>
-<span class="nc" id="L40">        existing.setSystemPronunciation(userDetails.getSystemPronunciation());</span>
-<span class="nc" id="L41">        existing.setVoiceId(userDetails.getVoiceId());</span>
+<span class="fc" id="L32">        UserDetails existing = userRepository.findByUid(uid);</span>
+<span class="fc" id="L33">        existing.setEmail(userDetails.getEmail());</span>
+<span class="fc" id="L34">        existing.setFirstName(userDetails.getFirstName());</span>
+<span class="fc" id="L35">        existing.setLastName(userDetails.getLastName());</span>
+<span class="fc" id="L36">        existing.setInsert(userDetails.getInsert());</span>
+<span class="fc" id="L37">        existing.setUserPronunciation(userDetails.getUserPronunciation());</span>
+<span class="fc" id="L38">        existing.setPreferredLastName(userDetails.getPreferredLastName());</span>
+<span class="fc" id="L39">        existing.setPreferredFirstName(userDetails.getPreferredFirstName());</span>
+<span class="fc" id="L40">        existing.setSystemPronunciation(userDetails.getSystemPronunciation());</span>
+<span class="fc" id="L41">        existing.setVoiceId(userDetails.getVoiceId());</span>
 
-<span class="nc" id="L43">        userRepository.save(existing);</span>
-<span class="nc" id="L44">        return &quot;SUCCESS&quot;;</span>
+<span class="fc" id="L43">        userRepository.save(existing);</span>
+<span class="fc" id="L44">        return &quot;SUCCESS&quot;;</span>
     }
 
     @DeleteMapping(&quot;/api/users/{uid}&quot;)
@@ -51,8 +51,8 @@ import java.util.Optional;
 <span class="fc" id="L51">            long num = userRepository.deleteByUid(uid);</span>
 <span class="fc" id="L52">            LOGGER.debug(&quot;Num rows delete: {}&quot;, num);</span>
 <span class="fc" id="L53">            return new ResponseEntity&lt;&gt;(&quot;SUCCESS&quot;, HttpStatus.OK);</span>
-<span class="nc" id="L54">        } catch (Exception e) {</span>
-<span class="nc" id="L55">            return new ResponseEntity&lt;&gt;(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);</span>
+<span class="fc" id="L54">        } catch (Exception e) {</span>
+<span class="fc" id="L55">            return new ResponseEntity&lt;&gt;(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);</span>
         }
     }
 

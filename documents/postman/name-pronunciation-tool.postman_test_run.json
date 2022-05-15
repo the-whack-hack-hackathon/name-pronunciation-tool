@@ -1,0 +1,106 @@
+{
+	"id": "f37a11a6-9686-4620-aaa6-7e8578d4cfa1",
+	"name": "name-pronunciation-tool",
+	"timestamp": "2022-05-15T19:08:44.735Z",
+	"collection_id": "0-c4b88142-78d8-4786-aa8f-bcff21b66bfc",
+	"folder_id": 0,
+	"environment_id": "0",
+	"totalPass": 0,
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "a5b849fe-7ae2-4215-94fc-889e6f8c4303",
+			"name": "Get all users",
+			"url": "https://name-pronunciation-tool-twh.azurewebsites.net/api/users",
+			"time": 650,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				650
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "75c455af-fabf-4e6c-a229-8260da4fe4bb",
+			"name": "Delete user By Id",
+			"url": "https://name-pronunciation-tool-twh.azurewebsites.net/api/users/212",
+			"time": 893,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				893
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "9771ad6d-be96-4af7-92d9-aa5b1590c50c",
+			"name": "Create user",
+			"url": "https://name-pronunciation-tool-twh.azurewebsites.net/api/users",
+			"time": 417,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				417
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "2ddbe5bc-77d8-4fd6-9bfd-557b116e02c2",
+			"name": "pronounce sound by id & rate",
+			"url": "https://name-pronunciation-tool-twh.azurewebsites.net/api/pronounceNameWithVoice/4/test/x-slow",
+			"time": 1276,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				1276
+			],
+			"allTests": [
+				{}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 3236,
+	"collection": {
+		"requests": [
+			{
+				"id": "a5b849fe-7ae2-4215-94fc-889e6f8c4303",
+				"method": "GET"
+			},
+			{
+				"id": "75c455af-fabf-4e6c-a229-8260da4fe4bb",
+				"method": "DELETE"
+			},
+			{
+				"id": "9771ad6d-be96-4af7-92d9-aa5b1590c50c",
+				"method": "POST"
+			},
+			{
+				"id": "2ddbe5bc-77d8-4fd6-9bfd-557b116e02c2",
+				"method": "GET"
+			}
+		]
+	}
+}

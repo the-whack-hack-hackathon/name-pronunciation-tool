@@ -1,7 +1,6 @@
 package com.hackathon.namepronunciationtool.service;
 
 import com.hackathon.namepronunciationtool.config.LocaleProperties;
-import com.hackathon.namepronunciationtool.config.NeuralVoices;
 import com.hackathon.namepronunciationtool.config.SpeechConfigProperties;
 import com.hackathon.namepronunciationtool.dto.NamePronounceDto;
 import org.apache.commons.io.IOUtils;
@@ -17,7 +16,6 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.Map;
 
 @Service
 public class NamePronunciationService {
@@ -50,6 +48,10 @@ public class NamePronunciationService {
         LOGGER.info("speechPayload= {}", speechPayload);
         HttpEntity<String> entity = new HttpEntity<>(speechPayload, headers);
 
+        return getVoiceFromAzureApi(entity);
+    }
+
+    private StreamingResponseBody getVoiceFromAzureApi(HttpEntity<String> entity) {
         byte[] voice = restTemplate.exchange(speechConfigProperties.getServiceUrl(), HttpMethod.POST, entity, byte[].class).getBody();
         LOGGER.info("Response received from speech service ");
         assert voice != null;
@@ -65,11 +67,7 @@ public class NamePronunciationService {
         LOGGER.info("speechPayload= {}", speechPayload);
         HttpEntity<String> entity = new HttpEntity<>(speechPayload, headers);
 
-        byte[] voice = restTemplate.exchange(speechConfigProperties.getServiceUrl(), HttpMethod.POST, entity, byte[].class).getBody();
-        LOGGER.info("Response received from speech service ");
-        assert voice != null;
-        InputStream in = new ByteArrayInputStream(voice);
-        return outputStream -> IOUtils.copy(in, outputStream);
+        return getVoiceFromAzureApi(entity);
     }
 
 

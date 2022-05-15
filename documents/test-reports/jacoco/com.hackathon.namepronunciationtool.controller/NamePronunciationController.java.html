@@ -60,12 +60,12 @@ public class NamePronunciationController {
 
     @PostMapping(value = &quot;/api/pronounceName&quot;, produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
     public ResponseEntity&lt;StreamingResponseBody&gt; namePronounce(@RequestBody NamePronounceDto namePronounceDto) {
-<span class="nc" id="L63">        LOGGER.info(&quot;Pronouncing name = {}&quot;, namePronounceDto);</span>
-<span class="nc" id="L64">        HttpHeaders httpHeaders = new HttpHeaders();</span>
-<span class="nc" id="L65">        httpHeaders.add(HttpHeaders.CONTENT_TYPE, &quot;audio/mpeg&quot;);</span>
-<span class="nc" id="L66">        StreamingResponseBody streamingResponseBody = namePronunciationService.getVoice(namePronounceDto);</span>
-<span class="nc" id="L67">        LOGGER.info(&quot;Success&quot;);</span>
-<span class="nc" id="L68">        return new ResponseEntity&lt;&gt;(streamingResponseBody, httpHeaders, HttpStatus.OK);</span>
+<span class="fc" id="L63">        LOGGER.info(&quot;Pronouncing name = {}&quot;, namePronounceDto);</span>
+<span class="fc" id="L64">        HttpHeaders httpHeaders = new HttpHeaders();</span>
+<span class="fc" id="L65">        httpHeaders.add(HttpHeaders.CONTENT_TYPE, &quot;audio/mpeg&quot;);</span>
+<span class="fc" id="L66">        StreamingResponseBody streamingResponseBody = namePronunciationService.getVoice(namePronounceDto);</span>
+<span class="fc" id="L67">        LOGGER.info(&quot;Success&quot;);</span>
+<span class="fc" id="L68">        return new ResponseEntity&lt;&gt;(streamingResponseBody, httpHeaders, HttpStatus.OK);</span>
     }
 
 

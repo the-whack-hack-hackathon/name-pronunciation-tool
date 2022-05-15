@@ -39,8 +39,7 @@ class NamePronunciationServiceTest {
 
     @BeforeEach
     void setUp() {
-        namePronunciationServiceUnderTest = new NamePronunciationService(mockRestTemplate, mockLocaleProperties,
-                mockSpeechConfigProperties);
+        namePronunciationServiceUnderTest = new NamePronunciationService(mockRestTemplate, mockLocaleProperties, mockSpeechConfigProperties);
     }
 
     @Test
@@ -50,12 +49,7 @@ class NamePronunciationServiceTest {
 
         ResponseEntity<byte[]> response = new ResponseEntity<byte[]>("jwtToken".getBytes(), HttpStatus.ACCEPTED);
         ResponseEntity<String> response2 = new ResponseEntity<String>("jwtToken", HttpStatus.ACCEPTED);
-        when(mockRestTemplate.exchange(
-                ArgumentMatchers.anyString(),
-                ArgumentMatchers.any(HttpMethod.class),
-                ArgumentMatchers.any(),
-                ArgumentMatchers.any(Class.class))
-        ).thenReturn(response2).thenReturn(response);
+        when(mockRestTemplate.exchange(ArgumentMatchers.anyString(), ArgumentMatchers.any(HttpMethod.class), ArgumentMatchers.any(), ArgumentMatchers.any(Class.class))).thenReturn(response2).thenReturn(response);
         when(mockSpeechConfigProperties.getTokenUrl()).thenReturn("tokenUrl");
         when(mockSpeechConfigProperties.getOutputFormat()).thenReturn("result");
 
@@ -75,12 +69,7 @@ class NamePronunciationServiceTest {
     void testGetVoice1_RestTemplateThrowsRestClientException() {
 
         when(mockSpeechConfigProperties.getSubscriptionKey()).thenReturn("result");
-        when(mockRestTemplate.exchange(
-                ArgumentMatchers.anyString(),
-                ArgumentMatchers.any(HttpMethod.class),
-                ArgumentMatchers.any(),
-                ArgumentMatchers.any(Class.class))
-        ).thenThrow(RestClientException.class);
+        when(mockRestTemplate.exchange(ArgumentMatchers.anyString(), ArgumentMatchers.any(HttpMethod.class), ArgumentMatchers.any(), ArgumentMatchers.any(Class.class))).thenThrow(RestClientException.class);
         when(mockSpeechConfigProperties.getTokenUrl()).thenReturn("tokenUrl");
 
         final NeuralVoices neuralVoices = new NeuralVoices();
@@ -90,23 +79,19 @@ class NamePronunciationServiceTest {
 
         assertThrows(RestClientException.class, () -> namePronunciationServiceUnderTest.getVoice("inputWord"));
     }
+
     @Test
     void testGetVoice2() {
         final NamePronounceDto namePronounceDto = new NamePronounceDto();
         namePronounceDto.setName("name");
-        namePronounceDto.setGender("gender");
+        namePronounceDto.setGender("f");
         namePronounceDto.setRate("rate");
         namePronounceDto.setLocale("locale");
 
         when(mockSpeechConfigProperties.getSubscriptionKey()).thenReturn("result");
         ResponseEntity<byte[]> response = new ResponseEntity<byte[]>("jwtToken".getBytes(), HttpStatus.ACCEPTED);
         ResponseEntity<String> response2 = new ResponseEntity<String>("jwtToken", HttpStatus.ACCEPTED);
-        when(mockRestTemplate.exchange(
-                ArgumentMatchers.anyString(),
-                ArgumentMatchers.any(HttpMethod.class),
-                ArgumentMatchers.any(),
-                ArgumentMatchers.any(Class.class))
-        ).thenReturn(response2).thenReturn(response);
+        when(mockRestTemplate.exchange(ArgumentMatchers.anyString(), ArgumentMatchers.any(HttpMethod.class), ArgumentMatchers.any(), ArgumentMatchers.any(Class.class))).thenReturn(response2).thenReturn(response);
         when(mockSpeechConfigProperties.getTokenUrl()).thenReturn("tokenUrl");
         when(mockSpeechConfigProperties.getOutputFormat()).thenReturn("result");
 
@@ -126,17 +111,12 @@ class NamePronunciationServiceTest {
 
         final NamePronounceDto namePronounceDto = new NamePronounceDto();
         namePronounceDto.setName("name");
-        namePronounceDto.setGender("gender");
+        namePronounceDto.setGender("f");
         namePronounceDto.setRate("rate");
         namePronounceDto.setLocale("locale");
 
         when(mockSpeechConfigProperties.getSubscriptionKey()).thenReturn("result");
-       when(mockRestTemplate.exchange(
-                ArgumentMatchers.anyString(),
-                ArgumentMatchers.any(HttpMethod.class),
-                ArgumentMatchers.any(),
-                ArgumentMatchers.any(Class.class))
-        ).thenThrow(RestClientException.class);
+        when(mockRestTemplate.exchange(ArgumentMatchers.anyString(), ArgumentMatchers.any(HttpMethod.class), ArgumentMatchers.any(), ArgumentMatchers.any(Class.class))).thenThrow(RestClientException.class);
         when(mockSpeechConfigProperties.getTokenUrl()).thenReturn("tokenUrl");
 
         final NeuralVoices neuralVoices = new NeuralVoices();
@@ -144,7 +124,7 @@ class NamePronunciationServiceTest {
         final Map<String, NeuralVoices> stringNeuralVoicesMap = Map.ofEntries(Map.entry("localeFemale", neuralVoices));
         when(mockLocaleProperties.getNeuralVoices()).thenReturn(stringNeuralVoicesMap);
 
-       assertThrows(RestClientException.class, () -> namePronunciationServiceUnderTest.getVoice(namePronounceDto));
+        assertThrows(RestClientException.class, () -> namePronunciationServiceUnderTest.getVoice(namePronounceDto));
 
     }
 
@@ -154,12 +134,7 @@ class NamePronunciationServiceTest {
         when(mockSpeechConfigProperties.getSubscriptionKey()).thenReturn("result");
         ResponseEntity<byte[]> response = new ResponseEntity<byte[]>("jwtToken".getBytes(), HttpStatus.ACCEPTED);
         ResponseEntity<String> response2 = new ResponseEntity<String>("jwtToken", HttpStatus.ACCEPTED);
-        when(mockRestTemplate.exchange(
-                ArgumentMatchers.anyString(),
-                ArgumentMatchers.any(HttpMethod.class),
-                ArgumentMatchers.any(),
-                ArgumentMatchers.any(Class.class))
-        ).thenReturn(response2).thenReturn(response);
+        when(mockRestTemplate.exchange(ArgumentMatchers.anyString(), ArgumentMatchers.any(HttpMethod.class), ArgumentMatchers.any(), ArgumentMatchers.any(Class.class))).thenReturn(response2).thenReturn(response);
         when(mockSpeechConfigProperties.getTokenUrl()).thenReturn("tokenUrl");
         when(mockSpeechConfigProperties.getOutputFormat()).thenReturn("result");
 
@@ -168,23 +143,14 @@ class NamePronunciationServiceTest {
         final Map<String, NeuralVoices> stringNeuralVoicesMap = Map.ofEntries(Map.entry("localeFemale", neuralVoices));
         when(mockLocaleProperties.getNeuralVoices()).thenReturn(stringNeuralVoicesMap);
 
-        when(mockSpeechConfigProperties.getServiceUrl()).thenReturn("result");
-
-        final StreamingResponseBody result = namePronunciationServiceUnderTest.getVoice("inputWord", "gender", "rate",
-                "locale");
-       assertNotNull(result);
+        assertThrows(NullPointerException.class, () -> namePronunciationServiceUnderTest.getVoice("inputWord", "m", "rate", "locale"));
     }
 
     @Test
     void testGetVoice3_RestTemplateThrowsRestClientException() {
         // Setup
         when(mockSpeechConfigProperties.getSubscriptionKey()).thenReturn("result");
-        when(mockRestTemplate.exchange(
-                ArgumentMatchers.anyString(),
-                ArgumentMatchers.any(HttpMethod.class),
-                ArgumentMatchers.any(),
-                ArgumentMatchers.any(Class.class))
-        ).thenThrow(RestClientException.class);
+        when(mockRestTemplate.exchange(ArgumentMatchers.anyString(), ArgumentMatchers.any(HttpMethod.class), ArgumentMatchers.any(), ArgumentMatchers.any(Class.class))).thenThrow(RestClientException.class);
         when(mockSpeechConfigProperties.getTokenUrl()).thenReturn("tokenUrl");
 
         final NeuralVoices neuralVoices = new NeuralVoices();
@@ -193,8 +159,7 @@ class NamePronunciationServiceTest {
         when(mockLocaleProperties.getNeuralVoices()).thenReturn(stringNeuralVoicesMap);
 
 
-        assertThrows(RestClientException.class, () ->  namePronunciationServiceUnderTest.getVoice("inputWord", "gender", "rate",
-                "locale"));
+        assertThrows(RestClientException.class, () -> namePronunciationServiceUnderTest.getVoice("inputWord", "f", "rate", "locale"));
     }
 
     @Test
@@ -203,12 +168,7 @@ class NamePronunciationServiceTest {
         when(mockSpeechConfigProperties.getSubscriptionKey()).thenReturn("result");
         ResponseEntity<byte[]> response = new ResponseEntity<byte[]>("jwtToken".getBytes(), HttpStatus.ACCEPTED);
         ResponseEntity<String> response2 = new ResponseEntity<String>("jwtToken", HttpStatus.ACCEPTED);
-        when(mockRestTemplate.exchange(
-                ArgumentMatchers.anyString(),
-                ArgumentMatchers.any(HttpMethod.class),
-                ArgumentMatchers.any(),
-                ArgumentMatchers.any(Class.class))
-        ).thenReturn(response2).thenReturn(response);
+        when(mockRestTemplate.exchange(ArgumentMatchers.anyString(), ArgumentMatchers.any(HttpMethod.class), ArgumentMatchers.any(), ArgumentMatchers.any(Class.class))).thenReturn(response2).thenReturn(response);
         when(mockSpeechConfigProperties.getTokenUrl()).thenReturn("tokenUrl");
         when(mockSpeechConfigProperties.getOutputFormat()).thenReturn("result");
         when(mockSpeechConfigProperties.getServiceUrl()).thenReturn("result");
@@ -221,15 +181,10 @@ class NamePronunciationServiceTest {
     void testGetVoice4_RestTemplateThrowsRestClientException() {
 
         when(mockSpeechConfigProperties.getSubscriptionKey()).thenReturn("result");
-        when(mockRestTemplate.exchange(
-                ArgumentMatchers.anyString(),
-                ArgumentMatchers.any(HttpMethod.class),
-                ArgumentMatchers.any(),
-                ArgumentMatchers.any(Class.class))
-        ).thenThrow(RestClientException.class);
+        when(mockRestTemplate.exchange(ArgumentMatchers.anyString(), ArgumentMatchers.any(HttpMethod.class), ArgumentMatchers.any(), ArgumentMatchers.any(Class.class))).thenThrow(RestClientException.class);
         when(mockSpeechConfigProperties.getTokenUrl()).thenReturn("tokenUrl");
 
-        assertThrows(RestClientException.class, () ->  namePronunciationServiceUnderTest.getVoice("inputWord", "name", "rate"));
+        assertThrows(RestClientException.class, () -> namePronunciationServiceUnderTest.getVoice("inputWord", "name", "rate"));
 
     }
 }

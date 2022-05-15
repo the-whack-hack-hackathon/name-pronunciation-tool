@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">name-pronunciation-tool</a> &gt; <a href="index.source.html" class="el_package">com.hackathon.namepronunciationtool.controller</a> &gt; <span class="el_source">UserController.java</span></div><h1>UserController.java</h1><pre class="source lang-java linenums">package com.hackathon.namepronunciationtool.controller;
+
+import com.hackathon.namepronunciationtool.entity.UserDetails;
+import com.hackathon.namepronunciationtool.repo.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+<span class="fc" id="L18">public class UserController {</span>
+<span class="fc" id="L19">    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);</span>
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @PostMapping(&quot;/api/users&quot;)
+    public String createUser(@RequestBody UserDetails userDetails) {
+<span class="nc" id="L26">        userRepository.save(userDetails);</span>
+<span class="nc" id="L27">        return &quot;SUCCESS&quot;;</span>
+    }
+
+    @PutMapping(&quot;/api/users/{uid}&quot;)
+    public String updateUser(@PathVariable(&quot;uid&quot;) String uid, @RequestBody UserDetails userDetails) {
+<span class="nc" id="L32">        UserDetails existing = userRepository.findByUid(uid);</span>
+<span class="nc" id="L33">        existing.setEmail(userDetails.getEmail());</span>
+<span class="nc" id="L34">        existing.setFirstName(userDetails.getFirstName());</span>
+<span class="nc" id="L35">        existing.setLastName(userDetails.getLastName());</span>
+<span class="nc" id="L36">        existing.setInsert(userDetails.getInsert());</span>
+<span class="nc" id="L37">        existing.setUserPronunciation(userDetails.getUserPronunciation());</span>
+<span class="nc" id="L38">        existing.setPreferredLastName(userDetails.getPreferredLastName());</span>
+<span class="nc" id="L39">        existing.setPreferredFirstName(userDetails.getPreferredFirstName());</span>
+<span class="nc" id="L40">        existing.setSystemPronunciation(userDetails.getSystemPronunciation());</span>
+<span class="nc" id="L41">        existing.setVoiceId(userDetails.getVoiceId());</span>
+
+<span class="nc" id="L43">        userRepository.save(existing);</span>
+<span class="nc" id="L44">        return &quot;SUCCESS&quot;;</span>
+    }
+
+    @DeleteMapping(&quot;/api/users/{uid}&quot;)
+    @Transactional
+    public ResponseEntity&lt;String&gt; deleteUser(@PathVariable(&quot;uid&quot;) String uid) {
+        try {
+<span class="fc" id="L51">            long num = userRepository.deleteByUid(uid);</span>
+<span class="fc" id="L52">            LOGGER.debug(&quot;Num rows delete: {}&quot;, num);</span>
+<span class="fc" id="L53">            return new ResponseEntity&lt;&gt;(&quot;SUCCESS&quot;, HttpStatus.OK);</span>
+<span class="nc" id="L54">        } catch (Exception e) {</span>
+<span class="nc" id="L55">            return new ResponseEntity&lt;&gt;(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    @GetMapping(&quot;/api/users/{uid}&quot;)
+    public ResponseEntity&lt;UserDetails&gt; fetchUser(@PathVariable(&quot;uid&quot;) String uid) {
+<span class="fc" id="L61">        Optional&lt;UserDetails&gt; user = userRepository.findById(uid);</span>
+<span class="fc" id="L62">        return user.map(userDetails -&gt; new ResponseEntity&lt;&gt;(userDetails, HttpStatus.OK)).orElseGet(() -&gt; new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND));</span>
+    }
+
+    @GetMapping(&quot;/api/users&quot;)
+    public List&lt;UserDetails&gt; fetchAllUsers() {
+<span class="fc" id="L67">        Iterable&lt;UserDetails&gt; iterator = userRepository.findAll();</span>
+<span class="fc" id="L68">        List&lt;UserDetails&gt; userList = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L69">        iterator.forEach(userList::add);</span>
+<span class="fc" id="L70">        return userList;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

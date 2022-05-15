@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -23,13 +22,13 @@ public class UserController {
     private UserRepository userRepository;
 
     @PostMapping("/api/users")
-    public String createUser(@RequestBody UserDetails userDetails){
+    public String createUser(@RequestBody UserDetails userDetails) {
         userRepository.save(userDetails);
         return "SUCCESS";
     }
 
     @PutMapping("/api/users/{uid}")
-    public String updateUser(@PathVariable("uid") String uid, @RequestBody UserDetails userDetails){
+    public String updateUser(@PathVariable("uid") String uid, @RequestBody UserDetails userDetails) {
         UserDetails existing = userRepository.findByUid(uid);
         existing.setEmail(userDetails.getEmail());
         existing.setFirstName(userDetails.getFirstName());
@@ -53,18 +52,18 @@ public class UserController {
             LOGGER.debug("Num rows delete: {}", num);
             return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/api/users/{uid}")
-    public ResponseEntity<UserDetails> fetchUser(@PathVariable("uid") String uid){
+    public ResponseEntity<UserDetails> fetchUser(@PathVariable("uid") String uid) {
         Optional<UserDetails> user = userRepository.findById(uid);
         return user.map(userDetails -> new ResponseEntity<>(userDetails, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @GetMapping("/api/users")
-    public List<UserDetails> fetchAllUsers(){
+    public List<UserDetails> fetchAllUsers() {
         Iterable<UserDetails> iterator = userRepository.findAll();
         List<UserDetails> userList = new ArrayList<>();
         iterator.forEach(userList::add);

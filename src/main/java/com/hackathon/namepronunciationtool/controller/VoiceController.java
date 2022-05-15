@@ -1,6 +1,5 @@
 package com.hackathon.namepronunciationtool.controller;
 
-import com.hackathon.namepronunciationtool.entity.UserDetails;
 import com.hackathon.namepronunciationtool.entity.Voice;
 import com.hackathon.namepronunciationtool.repo.VoiceRepository;
 import org.slf4j.Logger;
@@ -16,16 +15,18 @@ import java.util.List;
 public class VoiceController {
     private static final Logger LOGGER = LoggerFactory.getLogger(VoiceController.class);
 
+    private final VoiceRepository repo;
+
     @Autowired
-    private VoiceRepository repo;
+    public VoiceController(VoiceRepository repo) {
+        this.repo = repo;
+    }
 
     @GetMapping("/api/voice/list/all")
-    public List<Voice> fetchAllVoices(){
+    public List<Voice> fetchAllVoices() {
         Iterable<Voice> iterator = repo.findAll();
         List<Voice> voiceList = new ArrayList<>();
         iterator.forEach(voiceList::add);
         return voiceList;
     }
-
-
 }

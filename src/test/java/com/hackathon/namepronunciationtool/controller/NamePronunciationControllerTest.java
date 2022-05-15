@@ -1,5 +1,8 @@
 package com.hackathon.namepronunciationtool.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.hackathon.namepronunciationtool.dto.NamePronounceDto;
 import com.hackathon.namepronunciationtool.entity.Voice;
 import com.hackathon.namepronunciationtool.repo.VoiceRepository;
@@ -103,4 +106,28 @@ class NamePronunciationControllerTest {
         // Verify the results
         assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     }
+
+    @Test
+    void testNamePronounce3() throws Exception {
+        // Setup
+        when(mockNamePronunciationService.getVoice(any(NamePronounceDto.class))).thenReturn(null);
+        NamePronounceDto namePronounceDto = new NamePronounceDto();
+        namePronounceDto.setName("testname");
+        namePronounceDto.setGender("male");
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+        String requestJson=ow.writeValueAsString(namePronounceDto );
+        // Run the test
+        final MockHttpServletResponse response = mockMvc.perform(post("/api/pronounceName")
+                        .content(requestJson).contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_OCTET_STREAM_VALUE))
+                .andReturn().getResponse();
+
+        // Verify the results
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+    }
+
+
 }

@@ -33,8 +33,6 @@ class VoiceControllerTest {
 
     @Test
     void testFetchAllVoices() throws Exception {
-        // Setup
-        // Configure VoiceRepository.findAll(...).
         final Voice voice = new Voice();
         voice.setId(0);
         voice.setLocale("locale");
@@ -43,27 +41,23 @@ class VoiceControllerTest {
         final Iterable<Voice> voices = List.of(voice);
         when(mockRepo.findAll()).thenReturn(voices);
 
-        // Run the test
         final MockHttpServletResponse response = mockMvc.perform(get("/api/voice/list/all")
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
-        // Verify the results
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
         assertNotNull(response.getContentAsString());
     }
 
     @Test
     void testFetchAllVoices_VoiceRepositoryReturnsNoItems() throws Exception {
-        // Setup
+
         when(mockRepo.findAll()).thenReturn(Collections.emptyList());
 
-        // Run the test
         final MockHttpServletResponse response = mockMvc.perform(get("/api/voice/list/all")
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
-        // Verify the results
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.getContentAsString()).isEqualTo("[]");
     }

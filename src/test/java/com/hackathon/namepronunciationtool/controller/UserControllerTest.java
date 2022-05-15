@@ -1,5 +1,9 @@
 package com.hackathon.namepronunciationtool.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.hackathon.namepronunciationtool.entity.UserDetails;
 import com.hackathon.namepronunciationtool.repo.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -35,8 +39,7 @@ class UserControllerTest {
 
     @Test
     void testCreateUser() throws Exception {
-        // Setup
-        // Configure UserRepository.save(...).
+
         final UserDetails userDetails = new UserDetails();
         userDetails.setUid("uid");
         userDetails.setFirstName("firstName");
@@ -50,22 +53,19 @@ class UserControllerTest {
         userDetails.setVoiceId(0);
         when(mockUserRepository.save(any(UserDetails.class))).thenReturn(userDetails);
 
-        // Run the test
         final MockHttpServletResponse response = mockMvc.perform(post("/api/users")
-                        .content("content").contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(userDetails)).contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
-        // Verify the results
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-        assertThat(response.getContentAsString()).isEqualTo("expectedResponse");
+        assertThat(response.getContentAsString()).isEqualTo("SUCCESS");
         verify(mockUserRepository).save(any(UserDetails.class));
     }
 
     @Test
     void testUpdateUser() throws Exception {
-        // Setup
-        // Configure UserRepository.findByUid(...).
+
         final UserDetails userDetails = new UserDetails();
         userDetails.setUid("uid");
         userDetails.setFirstName("firstName");
@@ -79,7 +79,6 @@ class UserControllerTest {
         userDetails.setVoiceId(0);
         when(mockUserRepository.findByUid("uid")).thenReturn(userDetails);
 
-        // Configure UserRepository.save(...).
         final UserDetails userDetails1 = new UserDetails();
         userDetails1.setUid("uid");
         userDetails1.setFirstName("firstName");
@@ -95,35 +94,31 @@ class UserControllerTest {
 
         // Run the test
         final MockHttpServletResponse response = mockMvc.perform(put("/api/users/{uid}", "uid")
-                        .content("content").contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(userDetails1)).contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
-        // Verify the results
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-        assertThat(response.getContentAsString()).isEqualTo("expectedResponse");
+        assertThat(response.getContentAsString()).isEqualTo("SUCCESS");
         verify(mockUserRepository).save(any(UserDetails.class));
     }
 
     @Test
     void testDeleteUser() throws Exception {
-        // Setup
+
         when(mockUserRepository.deleteByUid("uid")).thenReturn(0L);
 
-        // Run the test
         final MockHttpServletResponse response = mockMvc.perform(delete("/api/users/{uid}", "uid")
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
-        // Verify the results
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-        assertThat(response.getContentAsString()).isEqualTo("expectedResponse");
+        assertThat(response.getContentAsString()).isEqualTo("SUCCESS");
     }
 
     @Test
     void testFetchUser() throws Exception {
-        // Setup
-        // Configure UserRepository.findById(...).
+
         final UserDetails userDetails1 = new UserDetails();
         userDetails1.setUid("uid");
         userDetails1.setFirstName("firstName");
@@ -138,35 +133,31 @@ class UserControllerTest {
         final Optional<UserDetails> userDetails = Optional.of(userDetails1);
         when(mockUserRepository.findById("uid")).thenReturn(userDetails);
 
-        // Run the test
         final MockHttpServletResponse response = mockMvc.perform(get("/api/users/{uid}", "uid")
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
-        // Verify the results
+        String expectedResult = "{\"uid\":\"uid\",\"firstName\":\"firstName\",\"lastName\":\"lastName\",\"preferredFirstName\":\"preferredFirstName\",\"preferredLastName\":\"preferredLastName\",\"email\":\"email\",\"userPronunciation\":\"userPronunciation\",\"systemPronunciation\":\"systemPronunciation\",\"voiceId\":0,\"id\":\"uid\",\"insert\":false,\"new\":false}";
+
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-        assertThat(response.getContentAsString()).isEqualTo("expectedResponse");
+        assertThat(response.getContentAsString()).isEqualTo(expectedResult);
     }
 
     @Test
     void testFetchUser_UserRepositoryReturnsAbsent() throws Exception {
-        // Setup
+
         when(mockUserRepository.findById("uid")).thenReturn(Optional.empty());
 
-        // Run the test
         final MockHttpServletResponse response = mockMvc.perform(get("/api/users/{uid}", "uid")
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
 
-        // Verify the results
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-        assertThat(response.getContentAsString()).isEqualTo("expectedResponse");
     }
 
     @Test
     void testFetchAllUsers() throws Exception {
-        // Setup
-        // Configure UserRepository.findAll(...).
+
         final UserDetails userDetails1 = new UserDetails();
         userDetails1.setUid("uid");
         userDetails1.setFirstName("firstName");
@@ -180,29 +171,36 @@ class UserControllerTest {
         userDetails1.setVoiceId(0);
         final Iterable<UserDetails> userDetails = List.of(userDetails1);
         when(mockUserRepository.findAll()).thenReturn(userDetails);
-
-        // Run the test
         final MockHttpServletResponse response = mockMvc.perform(get("/api/users")
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
+        String expectedResult = "[{\"uid\":\"uid\",\"firstName\":\"firstName\",\"lastName\":\"lastName\",\"preferredFirstName\":\"preferredFirstName\",\"preferredLastName\":\"preferredLastName\",\"email\":\"email\",\"userPronunciation\":\"userPronunciation\",\"systemPronunciation\":\"systemPronunciation\",\"voiceId\":0,\"id\":\"uid\",\"insert\":false,\"new\":false}]";
 
-        // Verify the results
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-        assertThat(response.getContentAsString()).isEqualTo("expectedResponse");
+        assertThat(response.getContentAsString()).isEqualTo(expectedResult);
     }
 
     @Test
     void testFetchAllUsers_UserRepositoryReturnsNoItems() throws Exception {
-        // Setup
         when(mockUserRepository.findAll()).thenReturn(Collections.emptyList());
-
-        // Run the test
         final MockHttpServletResponse response = mockMvc.perform(get("/api/users")
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
-
-        // Verify the results
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.getContentAsString()).isEqualTo("[]");
     }
+
+    private String toJson(UserDetails userDetails) {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+
+        try {
+            return ow.writeValueAsString(userDetails );
+        } catch (JsonProcessingException e) {
+            return null;
+        }
+    }
 }
+
+

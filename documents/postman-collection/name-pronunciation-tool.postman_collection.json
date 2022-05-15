@@ -1,0 +1,128 @@
+{
+	"info": {
+		"_postman_id": "c4b88142-78d8-4786-aa8f-bcff21b66bfc",
+		"name": "name-pronunciation-tool",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get all users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/users",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete user By Id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/users/1",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"1"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "1",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"uid\": \"123\",\n    \"firstName\": \"New\",\n    \"lastName\": \"User\",\n    \"preferredFirstName\": null,\n    \"preferredLastName\": null,\n    \"email\": null,\n    \"userPronunciation\": null,\n    \"systemPronunciation\": null,\n    \"voiceId\": 107,\n    \"id\": \"123\",\n    \"new\": true,\n    \"insert\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/users",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "pronounce sound by id & rate",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/pronounceNameWithVoice/4/test/x-slow",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"pronounceNameWithVoice",
+						"4",
+						"test",
+						"x-slow"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://name-pronunciation-tool-twh.azurewebsites.net",
+			"type": "default"
+		}
+	]
+}
